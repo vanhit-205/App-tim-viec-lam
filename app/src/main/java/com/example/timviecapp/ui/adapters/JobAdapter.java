@@ -73,7 +73,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
             binding.tvSalary.setText(currencyFormat.format(job.getSalary()));
             
             binding.tvDescription.setText(job.getDescription());
-            binding.tvDate.setText("Ngày bắt đầu: " + job.getStartDate());
+            binding.tvDate.setText("Ngày bắt đầu: " + com.example.timviecapp.utils.DateUtils.formatIsoDate(job.getStartDate()));
 
             binding.cgSkills.removeAllViews();
             if (job.getSkills() != null) {

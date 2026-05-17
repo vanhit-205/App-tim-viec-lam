@@ -98,8 +98,8 @@ public class JobDetailActivity extends AppCompatActivity {
         binding.tvSalary.setText(currencyFormat.format(job.getSalary()));
 
         binding.tvDescription.setText(job.getDescription());
-        binding.tvPostedDate.setText("Ngày bắt đầu: " + job.getStartDate());
-        binding.tvDeadline.setText("Hạn nộp: " + job.getEndDate());
+        binding.tvPostedDate.setText("Ngày bắt đầu: " + com.example.timviecapp.utils.DateUtils.formatIsoDate(job.getStartDate()));
+        binding.tvDeadline.setText("Hạn nộp: " + com.example.timviecapp.utils.DateUtils.formatIsoDate(job.getEndDate()));
 
         if (job.getCompany() != null) {
             binding.tvAboutCompany.setText(job.getCompany().getDescription());

@@ -57,13 +57,16 @@ public class MainActivity extends AppCompatActivity {
         String role = TokenManager.getUserRole();
         android.util.Log.d("TOKEN_CHECK", "Token: " + TokenManager.getToken());
         android.util.Log.d("TOKEN_CHECK", "Role: " + TokenManager.getUserRole());
-        if (role != null && (role.toUpperCase().contains("ADMIN") || role.toUpperCase().contains("RECRUITER") || role.toUpperCase().contains("EMPLOYER"))) {
-            try {
-                binding.toolbar.getMenu().clear();
+        
+        try {
+            binding.toolbar.getMenu().clear();
+            if (role != null && (role.toUpperCase().contains("ADMIN") || role.toUpperCase().contains("RECRUITER") || role.toUpperCase().contains("EMPLOYER"))) {
                 binding.toolbar.inflateMenu(R.menu.menu_recruiter);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                binding.toolbar.inflateMenu(R.menu.menu_main);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

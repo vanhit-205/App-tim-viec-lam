@@ -20,6 +20,11 @@ public class AddJobActivity extends AppCompatActivity {
     private ActivityAddJobBinding binding;
     private JobViewModel viewModel;
 
+    private final java.util.Calendar startCalendar = java.util.Calendar.getInstance();
+    private final java.util.Calendar endCalendar = java.util.Calendar.getInstance();
+    private final SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,7 @@ public class AddJobActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(JobViewModel.class);
 
         setupToolbar();
+        setupDefaultDates();
         setupListeners();
         observeViewModel();
     }
@@ -37,7 +43,26 @@ public class AddJobActivity extends AppCompatActivity {
         binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
+    private void setupDefaultDates() {
+        // Mặc định hạn nộp là sau 30 ngày
+        endCalendar.add(java.util.Calendar.DAY_OF_MONTH, 30);
+        binding.etStartDate.setText(displayDateFormat.format(startCalendar.getTime()));
+        binding.etEndDate.setText(displayDateFormat.format(endCalendar.getTime()));
+    }
+
+    private void showDatePicker(java.util.Calendar calendar, android.widget.EditText editText) {
+        new android.app.DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            calendar.set(java.util.Calendar.YEAR, year);
+            calendar.set(java.util.Calendar.MONTH, month);
+            calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
+            editText.setText(displayDateFormat.format(calendar.getTime()));
+        }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+    }
+
     private void setupListeners() {
+        binding.etStartDate.setOnClickListener(v -> showDatePicker(startCalendar, binding.etStartDate));
+        binding.etEndDate.setOnClickListener(v -> showDatePicker(endCalendar, binding.etEndDate));
+
         binding.btnSave.setOnClickListener(v -> {
             String name = binding.etName.getText().toString().trim();
             String location = binding.etLocation.getText().toString().trim();
@@ -56,10 +81,9 @@ public class AddJobActivity extends AppCompatActivity {
             int quantity = Integer.parseInt(quantityStr);
             int companyId = Integer.parseInt(companyIdStr);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-            sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
-            String startDate = sdf.format(new Date());
-            String endDate = sdf.format(new Date(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000)); // +30 days
+            apiDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+            String startDate = apiDateFormat.format(startCalendar.getTime());
+            String endDate = apiDateFormat.format(endCalendar.getTime());
 
             JobRequest request = new JobRequest(
                     name, location, salary, quantity, level, description,
