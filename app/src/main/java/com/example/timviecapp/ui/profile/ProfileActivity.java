@@ -76,11 +76,45 @@ public class ProfileActivity extends AppCompatActivity {
                 return;
             }
 
+            if (name.length() < 3 || name.length() > 50) {
+                Toast.makeText(this, "Họ tên phải từ 3 đến 50 ký tự", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!age.isEmpty()) {
+                try {
+                    int ageVal = Integer.parseInt(age);
+                    if (ageVal < 18 || ageVal > 100) {
+                        Toast.makeText(this, "Tuổi phải từ 18 đến 100", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Tuổi phải là số hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            if (!gender.isEmpty()) {
+                String upper = gender.toUpperCase();
+                if (!upper.equals("NAM") && !upper.equals("MALE") &&
+                    !upper.equals("NỮ") && !upper.equals("NU") && !upper.equals("FEMALE") &&
+                    !upper.equals("KHÁC") && !upper.equals("KHAC") && !upper.equals("OTHER")) {
+                    Toast.makeText(this, "Giới tính phải là 'Nam', 'Nữ' hoặc 'Khác'", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            if (address.length() > 500) {
+                Toast.makeText(this, "Địa chỉ không được vượt quá 500 ký tự", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             UpdateUserRequest request = new UpdateUserRequest();
             request.setName(name);
             request.setAge(age);
             request.setGender(gender);
             request.setAddress(address);
+            request.setRole(TokenManager.getUserRole());
 
             viewModel.updateUser(currentUserId, request).observe(this, response -> {
                 viewModel.setLoading(false);

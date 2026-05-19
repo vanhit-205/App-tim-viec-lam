@@ -32,6 +32,12 @@ public class ManageResumesActivity extends AppCompatActivity {
         loadResumes();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadResumes();
+    }
+
     private void setupToolbar() {
         binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }

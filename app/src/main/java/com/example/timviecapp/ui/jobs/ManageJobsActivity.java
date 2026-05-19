@@ -63,7 +63,7 @@ public class ManageJobsActivity extends AppCompatActivity {
     }
 
     private void loadJobs() {
-        viewModel.getJobs(0, 50).observe(this, response -> {
+        viewModel.getJobs(1, 50).observe(this, response -> {
             viewModel.setLoading(false);
             if (response != null && response.isSuccess() && response.getData() != null) {
                 adapter.setJobs(response.getData().getItems());

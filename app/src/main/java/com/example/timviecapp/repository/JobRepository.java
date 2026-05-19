@@ -103,4 +103,26 @@ public class JobRepository {
 
         return jobData;
     }
+
+    public LiveData<ApiResponse<PaginationResponse<JobResponse>>> getJobsByCompany(int companyId, int page, int size) {
+        MutableLiveData<ApiResponse<PaginationResponse<JobResponse>>> jobData = new MutableLiveData<>();
+        
+        jobApiService.getJobsByCompany(companyId, page, size).enqueue(new Callback<ApiResponse<PaginationResponse<JobResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PaginationResponse<JobResponse>>> call, Response<ApiResponse<PaginationResponse<JobResponse>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    jobData.setValue(response.body());
+                } else {
+                    jobData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<PaginationResponse<JobResponse>>> call, Throwable t) {
+                jobData.setValue(null);
+            }
+        });
+        
+        return jobData;
+    }
 }

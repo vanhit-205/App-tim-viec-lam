@@ -27,6 +27,8 @@
         
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.auth.ForgotPasswordActivity" />
+        <activity android:name=".ui.auth.OtpVerificationActivity" />
+        <activity android:name=".ui.auth.ResetPasswordActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.jobs.JobDetailActivity" />
         <activity android:name=".ui.profile.ProfileActivity" />
@@ -41,6 +43,8 @@
         <activity android:name=".ui.jobs.AddJobActivity" />
         <activity android:name=".ui.companies.ManageCompanyActivity" />
         <activity android:name=".ui.companies.CreateCompanyActivity" />
+        <activity android:name=".ui.admin.SkillManagementActivity" />
+        <activity android:name=".ui.admin.UserManagementActivity" />
         
     </application>
 

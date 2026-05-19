@@ -56,6 +56,14 @@ public class JobViewModel extends ViewModel {
         return jobRepository.searchJobs(keyword, location, level, page, size);
     }
 
+    /**
+     * Lấy danh sách công việc của một công ty
+     */
+    public LiveData<ApiResponse<PaginationResponse<JobResponse>>> getJobsByCompany(int companyId, int page, int size) {
+        isLoading.setValue(true);
+        return jobRepository.getJobsByCompany(companyId, page, size);
+    }
+
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }

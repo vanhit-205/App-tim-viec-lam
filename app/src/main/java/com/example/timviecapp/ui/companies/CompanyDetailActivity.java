@@ -100,8 +100,22 @@ public class CompanyDetailActivity extends AppCompatActivity {
      * Tải danh sách job của công ty (mở rộng từ UC10)
      */
     private void loadCompanyJobs() {
-        // Sử dụng JobRepository thông qua ViewModel (có thể mở rộng thêm)
-        // Tạm thời hiển thị thông báo không có job
-        binding.tvNoJobs.setVisibility(View.VISIBLE);
+        jobViewModel.getJobsByCompany(companyId, 1, 100).observe(this, response -> {
+            jobViewModel.setLoading(false);
+            if (response != null && response.isSuccess() && response.getData() != null) {
+                java.util.List<com.example.timviecapp.models.job.JobResponse> jobs = response.getData().getItems();
+                if (jobs != null && !jobs.isEmpty()) {
+                    binding.tvNoJobs.setVisibility(View.GONE);
+                    binding.rvJobs.setVisibility(View.VISIBLE);
+                    jobAdapter.setJobs(jobs);
+                } else {
+                    binding.tvNoJobs.setVisibility(View.VISIBLE);
+                    binding.rvJobs.setVisibility(View.GONE);
+                }
+            } else {
+                binding.tvNoJobs.setVisibility(View.VISIBLE);
+                binding.rvJobs.setVisibility(View.GONE);
+            }
+        });
     }
 }

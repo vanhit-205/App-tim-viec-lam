@@ -13,6 +13,8 @@ public class UserResponse {
     private String age;
     private String gender;
     private String address;
+    private Boolean isLocked;
+    private Boolean isEnabled;
 
     public int getId() {
         return id;
@@ -52,5 +54,21 @@ public class UserResponse {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(Boolean locked) {
+        isLocked = locked;
+    }
+
+    public Boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
     }
 }

@@ -50,6 +50,19 @@ public class ResumeViewModel extends ViewModel {
     }
 
     /**
+     * UC24: Tải CV và ứng tuyển sử dụng Multipart
+     */
+    public LiveData<ApiResponse<ResumeResponse>> uploadResume(
+            okhttp3.RequestBody email,
+            okhttp3.RequestBody userId,
+            okhttp3.RequestBody jobId,
+            okhttp3.MultipartBody.Part file
+    ) {
+        isLoading.setValue(true);
+        return resumeRepository.uploadResume(email, userId, jobId, file);
+    }
+
+    /**
      * UC27: Xem chi tiết resume
      */
     public LiveData<ApiResponse<ResumeResponse>> getResumeById(int id) {
@@ -63,6 +76,22 @@ public class ResumeViewModel extends ViewModel {
     public LiveData<ApiResponse<Object>> deleteResume(int id) {
         isLoading.setValue(true);
         return resumeRepository.deleteResume(id);
+    }
+
+    /**
+     * UC25: Cập nhật nội dung resume
+     */
+    public LiveData<ApiResponse<ResumeResponse>> updateResume(int id, ResumeRequest request) {
+        isLoading.setValue(true);
+        return resumeRepository.updateResume(id, request);
+    }
+
+    /**
+     * UC25: Cập nhật trạng thái resume (Duyệt hồ sơ)
+     */
+    public LiveData<ApiResponse<ResumeResponse>> updateResumeStatus(int id, String status) {
+        isLoading.setValue(true);
+        return resumeRepository.updateResumeStatus(id, status);
     }
 
     public LiveData<Boolean> getIsLoading() {

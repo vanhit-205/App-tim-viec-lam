@@ -119,6 +119,37 @@ public class ResumeRepository {
     }
 
     /**
+     * UC24: Tải CV và ứng tuyển công việc sử dụng MultipartBody.Part
+     */
+    public LiveData<ApiResponse<ResumeResponse>> uploadResume(
+            okhttp3.RequestBody email,
+            okhttp3.RequestBody userId,
+            okhttp3.RequestBody jobId,
+            okhttp3.MultipartBody.Part file
+    ) {
+        MutableLiveData<ApiResponse<ResumeResponse>> data = new MutableLiveData<>();
+        apiService.uploadResume(email, userId, jobId, file).enqueue(new Callback<ApiResponse<ResumeResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ResumeResponse>> call,
+                                   Response<ApiResponse<ResumeResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    data.setValue(response.body());
+                } else {
+                    Log.e(TAG, "uploadResume failed: " + response.code());
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ResumeResponse>> call, Throwable t) {
+                Log.e(TAG, "uploadResume error: " + t.getMessage());
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    /**
      * UC27: Lấy chi tiết resume theo ID
      */
     public LiveData<ApiResponse<ResumeResponse>> getResumeById(int id) {
@@ -164,6 +195,32 @@ public class ResumeRepository {
             @Override
             public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                 Log.e(TAG, "deleteResume error: " + t.getMessage());
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    /**
+     * UC25: Cập nhật nội dung resume (cho Candidate)
+     */
+    public LiveData<ApiResponse<ResumeResponse>> updateResume(int id, ResumeRequest request) {
+        MutableLiveData<ApiResponse<ResumeResponse>> data = new MutableLiveData<>();
+        apiService.updateResume(id, request).enqueue(new Callback<ApiResponse<ResumeResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ResumeResponse>> call,
+                                   Response<ApiResponse<ResumeResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    data.setValue(response.body());
+                } else {
+                    Log.e(TAG, "updateResume failed: " + response.code());
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ResumeResponse>> call, Throwable t) {
+                Log.e(TAG, "updateResume error: " + t.getMessage());
                 data.setValue(null);
             }
         });

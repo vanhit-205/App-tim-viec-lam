@@ -40,6 +40,11 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show();
                 return;

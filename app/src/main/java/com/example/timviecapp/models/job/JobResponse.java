@@ -15,6 +15,7 @@ public class JobResponse {
     private String startDate;
     private String endDate;
     private boolean active;
+    private String status;
     private CompanyResponse company;
     private List<SkillResponse> skills;
 
@@ -36,8 +37,36 @@ public class JobResponse {
     public void setStartDate(String startDate) { this.startDate = startDate; }
     public String getEndDate() { return endDate; }
     public void setEndDate(String endDate) { this.endDate = endDate; }
-    public boolean isActive() { return active; }
+    
+    public boolean isActive() { 
+        if (status != null) {
+            return "OPEN".equalsIgnoreCase(status);
+        }
+        
+        // Dự phòng: So sánh hạn nộp (endDate) với thời gian hiện tại
+        if (endDate != null && !endDate.isEmpty()) {
+            try {
+                java.text.SimpleDateFormat parser = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
+                parser.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                java.util.Date end = parser.parse(endDate);
+                return end.after(new java.util.Date());
+            } catch (Exception e) {
+                try {
+                    java.text.SimpleDateFormat parser = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+                    java.util.Date end = parser.parse(endDate);
+                    return end.after(new java.util.Date());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return active; 
+    }
     public void setActive(boolean active) { this.active = active; }
+    
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
     public CompanyResponse getCompany() { return company; }
     public void setCompany(CompanyResponse company) { this.company = company; }
     public List<SkillResponse> getSkills() { return skills; }

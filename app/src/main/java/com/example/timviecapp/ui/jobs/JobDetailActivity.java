@@ -115,10 +115,19 @@ public class JobDetailActivity extends AppCompatActivity {
             }
         }
 
-        // Nếu job không active, ẩn nút ứng tuyển
-        if (!job.isActive()) {
-            binding.btnApply.setEnabled(false);
-            binding.btnApply.setText("Đã đóng tuyển dụng");
+        // Phân quyền hiển thị nút Ứng tuyển theo Role
+        String role = TokenManager.getUserRole();
+        if (role != null && (role.toUpperCase().contains("ADMIN") || role.toUpperCase().contains("RECRUITER") || role.toUpperCase().contains("EMPLOYER"))) {
+            binding.btnApply.setVisibility(View.GONE);
+        } else {
+            binding.btnApply.setVisibility(View.VISIBLE);
+            if (!job.isActive()) {
+                binding.btnApply.setEnabled(false);
+                binding.btnApply.setText("Đã đóng tuyển dụng");
+            } else {
+                binding.btnApply.setEnabled(true);
+                binding.btnApply.setText("Ứng tuyển ngay");
+            }
         }
     }
 }
